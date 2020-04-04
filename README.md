@@ -12,6 +12,18 @@ cd /<WHERE_YOUR_IMAGES_ARE>/
 wget https://raw.githubusercontent.com/Oros42/KISSGallery/master/index.php
 ```
 
+## Recommendation, resize images you share
+Install imagemagick
+```bash
+sudo apt install imagemagick
+```
+Resize any «.jpg» in 2000x2000px :
+```bash
+# /!\ This line modify files !
+for i in *.jpg; do convert "$i" -resize 2000x2000 -strip -interlace Plane -auto-orient "${i}"; done
+```
+Adapte this to your needs.  
+
 # You want more ?
 
 ## For uploading files
