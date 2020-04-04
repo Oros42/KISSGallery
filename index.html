@@ -1,76 +1,10 @@
-<?php
-/**
- * KISSGallery (Keep It Stupid Simple Gallery)
- *
- * @author  Oros42 <oros.kissgallery@ecirtam.net>
- * @link    https://github.com/Oros42/KISSGallery
- * @license CC0 Public Domain
- * @version 1.0
- * @date    2020-04-04
- *
- * Install :
- * $ sudo apt install php-gd
- * $ cd /<WHERE_YOUR_IMAGES_ARE>/
- * $ wget https://raw.githubusercontent.com/Oros42/KISSGallery/master/index.php
- * 
- * KISS : https://en.wikipedia.org/wiki/KISS_principle
- */
-$title = "KISSGallery"; // You can change
-define("HEIGHT", 300); // You can change
-define("MAKE_THUMBNAIL", true); // You can change but it's better to leave it to true
-// You can change the favicon if you want
-define("FAVICON_PATH", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAL0lEQVQ4y2NkYGD4z0ABYGFgYGD4/x+7GYyMjAyE5JkYKAQDbwDjaCCOBuLwCEQAApMWH3p4gJkAAAAASUVORK5CYII=");
-//define("FAVICON_PATH", "favicon.png");
-
-if (MAKE_THUMBNAIL) {
-	define("TMP_DIR", "./cache/"); // You can change
-	if (!is_dir(TMP_DIR)) {
-		if (!@mkdir(TMP_DIR, 0700)) {
-			die("Can't mkdir ".TMP_DIR);
-		}
-	}
-	if (!function_exists("imagecreatefromjpeg")) {
-		die("sudo apt install php-gd\nOr set MAKE_THUMBNAIL to false");
-	}
-} else {
-	define("TMP_DIR", "");
-}
-$allowedExt = ['jpeg', 'png', 'gif', 'bmp', 'wbmp', 'webp', 'xbm']; // Don't change
-$excludedFiles = ['.gitignore', 'favicon.ico', 'favicon.png', 'index.php', 'LICENSE', 'README.md'];
-
-function makeThumbnail($file, $ext) {
-	echo "make thumbnail ".$file;
-	ob_flush(); flush(); 
-	list($width, $height) = getimagesize($file);
-	if ($height < 1) {
-		$height = 1;
-	}
-	if ($width < 1) {
-		$width = 1;
-	}
-	$newwidth = $width * (HEIGHT/$height);
-	$imgcreate = "imagecreatefrom".$ext;
-	$src = $imgcreate($file);
-	$dst = imagecreatetruecolor($newwidth, HEIGHT);
-	imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, HEIGHT, $width, $height);
-	$imgsave = "image".$ext;
-	if (!$imgsave($dst, TMP_DIR.$file)) {
-		echo " can't save :-/";
-		$returnStatus = 0;
-	} else {
-		echo " ok";
-		$returnStatus = 1;
-	}
-	echo "<br>\n";
-	return $returnStatus;
-}
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <!-- https://github.com/Oros42/KISSGallery -->
 <html>
 <head>
-	<title><?php echo $title; ?></title>
+	<title>KISSGallery</title>
 	<meta charset="utf-8">
-	<link rel="shortcut icon" href="<?php echo FAVICON_PATH; ?>" />
+	<link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAL0lEQVQ4y2NkYGD4z0ABYGFgYGD4/x+7GYyMjAyE5JkYKAQDbwDjaCCOBuLwCEQAApMWH3p4gJkAAAAASUVORK5CYII=" />
 	<style type="text/css">
 body{background-color: black;color: #AAAAAA;}
 a{margin: 6px;color: red;text-decoration: none;display: inline-block;}
@@ -87,48 +21,23 @@ a{margin: 6px;color: red;text-decoration: none;display: inline-block;}
 .prev_next div{font-size: xx-large;background: #0006;padding: 2px 5px 5px 10px;border-radius: 5px;position: absolute;color: #D1CFCFCC;bottom: 0;}
 .prev_next:hover div{color: #FFF;}
 #next_diapo div, #close_diapo div{right: 0;}
-<?php 
-if (!MAKE_THUMBNAIL) {
-	printf("#imgListe a img{ height: %dpx;}\n", HEIGHT);
-}
-?>
 	</style>
 </head>
 <body>
-<?php
-$imgListe = [];
-$liste = scandir(".");
-unset($liste[0]); // rm .
-unset($liste[1]); // rm ..
-$needReload = false;
-foreach ($liste as $file) {
-	if (!in_array($file, $excludedFiles)) {
-		if (is_file($file) && filesize($file) > 11) {
-			$exif = exif_imagetype($file);
-			if ($exif > 0) {
-				$ext = substr(image_type_to_extension($exif),1); // don't trust file name !
-				if (in_array($ext, $allowedExt)) {
-					if (MAKE_THUMBNAIL && !is_file(TMP_DIR.$file)) {
-						if (makeThumbnail($file, $ext)) {
-							$imgListe[] = $file;
-						}
-						$needReload = true;
-					} else {
-						$imgListe[] = $file;
-					}
-				}
-			}
-		}
-	}
-}
-if ($needReload) {
-   	echo "<a href=''>Reload</a><br>\n";
-}
-echo "<div id='imgListe'>\n";
-foreach ($imgListe as $img) {
-	echo sprintf("<a href='%s'><img src='%s%s'></a>\n", $img, TMP_DIR, $img);
-}
-?>
+<div id='imgListe'>
+<a href='100_0178.jpg'><img src='./cache/100_0178.jpg'></a>
+<a href='100_4154.JPG'><img src='./cache/100_4154.JPG'></a>
+<a href='P1000306.JPG'><img src='./cache/P1000306.JPG'></a>
+<a href='P1000365.JPG'><img src='./cache/P1000365.JPG'></a>
+<a href='P1000444.JPG'><img src='./cache/P1000444.JPG'></a>
+<a href='P1000573.JPG'><img src='./cache/P1000573.JPG'></a>
+<a href='P1010632.JPG'><img src='./cache/P1010632.JPG'></a>
+<a href='P1010645.JPG'><img src='./cache/P1010645.JPG'></a>
+<a href='P1010713.JPG'><img src='./cache/P1010713.JPG'></a>
+<a href='P1020349.JPG'><img src='./cache/P1020349.JPG'></a>
+<a href='P1020382.JPG'><img src='./cache/P1020382.JPG'></a>
+<a href='P1020397.JPG'><img src='./cache/P1020397.JPG'></a>
+<a href='P1020608.JPG'><img src='./cache/P1020608.JPG'></a>
 </div>
 <div id="diapo" hidden="">
 	<div id="loader" class="loader" hidden=""></div>
