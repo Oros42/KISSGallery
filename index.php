@@ -18,7 +18,7 @@
 $title = "KISSGallery"; // You can change
 define("HEIGHT", 300); // You can change
 define("MAKE_THUMBNAIL", true); // You can change but it's better to leave it to true
-// You can change the favicon if you whant
+// You can change the favicon if you want
 define("FAVICON_PATH", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAL0lEQVQ4y2NkYGD4z0ABYGFgYGD4/x+7GYyMjAyE5JkYKAQDbwDjaCCOBuLwCEQAApMWH3p4gJkAAAAASUVORK5CYII=");
 //define("FAVICON_PATH", "favicon.png");
 
