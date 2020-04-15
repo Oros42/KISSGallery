@@ -5,8 +5,8 @@
  * @author  Oros42 <oros.kissgallery@ecirtam.net>
  * @link    https://github.com/Oros42/KISSGallery
  * @license CC0 Public Domain
- * @version 1.0
- * @date    2020-04-04
+ * @version 1.1
+ * @date    2020-04-15
  *
  * Install :
  * $ sudo apt install php-gd
@@ -21,6 +21,10 @@ define("MAKE_THUMBNAIL", true); // You can change but it's better to leave it to
 // You can change the favicon if you want
 define("FAVICON_PATH", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAL0lEQVQ4y2NkYGD4z0ABYGFgYGD4/x+7GYyMjAyE5JkYKAQDbwDjaCCOBuLwCEQAApMWH3p4gJkAAAAASUVORK5CYII=");
 //define("FAVICON_PATH", "favicon.png");
+
+// If the script is run in cli mode (for creating cache)
+// then we don't show HTML
+define("SHOW_HTML", php_sapi_name() != "cli");
 
 if (MAKE_THUMBNAIL) {
 	define("TMP_DIR", "./cache/"); // You can change
@@ -40,7 +44,9 @@ $excludedFiles = ['.gitignore', 'favicon.ico', 'favicon.png', 'index.php', 'LICE
 
 function makeThumbnail($file, $ext) {
 	echo "make thumbnail ".$file;
-	ob_flush(); flush(); 
+	if (SHOW_HTML) {
+		ob_flush(); flush(); 
+	}
 	list($width, $height) = getimagesize($file);
 	if ($height < 1) {
 		$height = 1;
@@ -64,6 +70,7 @@ function makeThumbnail($file, $ext) {
 	echo "<br>\n";
 	return $returnStatus;
 }
+if (SHOW_HTML) {
 ?><!DOCTYPE html>
 <!-- https://github.com/Oros42/KISSGallery -->
 <html>
@@ -96,6 +103,7 @@ if (!MAKE_THUMBNAIL) {
 </head>
 <body>
 <?php
+}
 $imgListe = [];
 $liste = scandir(".");
 unset($liste[0]); // rm .
@@ -121,13 +129,14 @@ foreach ($liste as $file) {
 		}
 	}
 }
-if ($needReload) {
-   	echo "<a href=''>Reload</a><br>\n";
-}
-echo "<div id='imgListe'>\n";
-foreach ($imgListe as $img) {
-	echo sprintf("<a href='%s'><img src='%s%s'></a>\n", $img, TMP_DIR, $img);
-}
+if (SHOW_HTML) {
+	if ($needReload) {
+	   	echo "<a href=''>Reload</a><br>\n";
+	}
+	echo "<div id='imgListe'>\n";
+	foreach ($imgListe as $img) {
+		echo sprintf("<a href='%s'><img src='%s%s'></a>\n", $img, TMP_DIR, $img);
+	}
 ?>
 </div>
 <div id="diapo" hidden="">
@@ -217,4 +226,5 @@ foreach ($imgListe as $img) {
 	}, true);
 </script>
 </body>
-</html>
+</html><?php
+} ?>
