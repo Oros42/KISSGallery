@@ -29,7 +29,7 @@ define("SHOW_HTML", php_sapi_name() != "cli");
 if (MAKE_THUMBNAIL) {
 	define("TMP_DIR", "./cache/"); // You can change
 	if (!is_dir(TMP_DIR)) {
-		if (!@mkdir(TMP_DIR, 0700)) {
+		if (!@mkdir(TMP_DIR, 0755)) {
 			die("Can't mkdir ".TMP_DIR);
 		}
 	}
@@ -67,6 +67,7 @@ function makeThumbnail($file, $ext) {
 		echo " ok";
 		$returnStatus = 1;
 	}
+	chmod(TMP_DIR.$file, 0755);
 	echo "<br>\n";
 	return $returnStatus;
 }
