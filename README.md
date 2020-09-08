@@ -26,6 +26,35 @@ for i in *.{jpg,JPG,jpeg}; do convert "$i" -resize 2000x2000 -strip -interlace P
 ```
 Adapte this to your needs.  
 
+## Customize
+
+### Change the favicon
+
+Put a favicon image in the folder and edit line 23 :  
+```
+//define("FAVICON_PATH", "favicon.png");
+```
+to
+```
+define("FAVICON_PATH", "favicon.png");
+```
+With the good favicon's name.  
+
+### Add title on images
+
+Create the file ```titles.csv``` with :  
+```
+<FILE_NAME_1>;<TITLE>
+<FILE_NAME_2>;<TITLE>
+<FILE_NAME_3>;<TITLE>
+...
+```
+Example :  
+```
+100_0178.jpg;A nice sunset
+100_4154.JPG;A cool building
+```
+
 # You want more ?
 
 ## For uploading files

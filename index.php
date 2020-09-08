@@ -40,7 +40,18 @@ if (MAKE_THUMBNAIL) {
 	define("TMP_DIR", "");
 }
 $allowedExt = ['jpeg', 'png', 'gif', 'bmp', 'wbmp', 'webp', 'xbm']; // Don't change
-$excludedFiles = ['.gitignore', 'favicon.ico', 'favicon.png', 'index.php', 'LICENSE', 'README.md'];
+$excludedFiles = ['.gitignore', 'favicon.ico', 'favicon.png', 'index.php', 'LICENSE', 'README.md', 'titles.csv'];
+
+$titles = []; // titles of images
+if (is_file("titles.csv")) {
+	if (($handle = fopen("titles.csv", "r")) !== FALSE) {
+		while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+			//$titles[<image name>] = "<title>";
+			$titles[$data[0]] = $data[1];
+		}
+		fclose($handle);
+	}
+}
 
 function makeThumbnail($file, $ext) {
 	echo "make thumbnail ".$file;
@@ -136,13 +147,18 @@ if (SHOW_HTML) {
 	}
 	echo "<div id='imgListe'>\n";
 	foreach ($imgListe as $img) {
-		echo sprintf("<a href='%s'><img src='%s%s'></a>\n", $img, TMP_DIR, $img);
+		if (isset($titles[$img])) {
+			$imgTitle = trim(htmlentities($titles[$img]));
+		} else {
+			$imgTitle = "";
+		}
+		echo sprintf("<a href='%s' title='%s'><img src='%s%s'></a>\n", $img, $imgTitle, TMP_DIR, $img);
 	}
 ?>
 </div>
 <div id="diapo" hidden="">
 	<div id="loader" class="loader" hidden=""></div>
-	<img id="bigImg" src="" alt="">
+	<img id="bigImg" src="" alt="" title="">
 	<a href="#" onclick="prevDiapo();return false;" id="prev_diapo" class="prev_next" title="Previous"><div>❮</div></a>
 	<a href="#" onclick="closeDiapo();return false;" id="close_diapo" class="prev_next" title="Close"><div>✕</div></a>
 	<a href="#" onclick="nextDiapo();return false;" id="next_diapo" class="prev_next" title="Next"><div>❯</div></a>
@@ -155,6 +171,7 @@ if (SHOW_HTML) {
 		loader.hidden = false;
 		document.location.hash = aList[imgIndex].hash;
 		bigImg.src = aList[imgIndex].hash.split("&")[1];
+		bigImg.title = aList[imgIndex].title;
 		diapo.hidden = false;
 		return false;
 	}
