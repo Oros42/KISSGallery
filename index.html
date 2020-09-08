@@ -41,7 +41,7 @@ a{margin: 6px;color: red;text-decoration: none;display: inline-block;}
 </div>
 <div id="diapo" hidden="">
 	<div id="loader" class="loader" hidden=""></div>
-	<img id="bigImg" src="" alt="">
+	<img id="bigImg" src="" alt="" title="">
 	<a href="#" onclick="prevDiapo();return false;" id="prev_diapo" class="prev_next" title="Previous"><div>❮</div></a>
 	<a href="#" onclick="closeDiapo();return false;" id="close_diapo" class="prev_next" title="Close"><div>✕</div></a>
 	<a href="#" onclick="nextDiapo();return false;" id="next_diapo" class="prev_next" title="Next"><div>❯</div></a>
@@ -54,6 +54,7 @@ a{margin: 6px;color: red;text-decoration: none;display: inline-block;}
 		loader.hidden = false;
 		document.location.hash = aList[imgIndex].hash;
 		bigImg.src = aList[imgIndex].hash.split("&")[1];
+		bigImg.title = aList[imgIndex].title;
 		diapo.hidden = false;
 		return false;
 	}
