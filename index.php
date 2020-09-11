@@ -6,7 +6,7 @@
  * @link    https://github.com/Oros42/KISSGallery
  * @license CC0 Public Domain
  * @version 1.2
- * @date    2020-09-08
+ * @date    2020-09-11
  *
  * Install :
  * $ sudo apt install php-gd
