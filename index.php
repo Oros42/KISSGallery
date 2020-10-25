@@ -152,7 +152,7 @@ if (SHOW_HTML) {
 		} else {
 			$imgTitle = "";
 		}
-		$img = str_replace("'", "&#39;", $img);
+		$img = urlencode($img);
 		echo sprintf("<a href='%s' title=\"%s\"><img src='%s%s'></a>\n", $img, $imgTitle, TMP_DIR, $img);
 	}
 ?>
