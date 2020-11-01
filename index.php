@@ -5,8 +5,8 @@
  * @author  Oros42 <oros.kissgallery@ecirtam.net>
  * @link    https://github.com/Oros42/KISSGallery
  * @license CC0 Public Domain
- * @version 1.2
- * @date    2020-09-11
+ * @version 1.3
+ * @date    2020-10-01
  *
  * Install :
  * $ sudo apt install php-gd
