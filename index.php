@@ -85,6 +85,7 @@ function makeThumbnail($file, $ext) {
 				break;
 		}
 	}
+	imageinterlace($dst, true);
 	$imgsave = "image".$ext;
 	if (!$imgsave($dst, TMP_DIR.$file)) {
 		echo " can't save :-/";
