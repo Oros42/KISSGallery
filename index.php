@@ -70,6 +70,21 @@ function makeThumbnail($file, $ext) {
 	$src = $imgcreate($file);
 	$dst = imagecreatetruecolor($newwidth, HEIGHT);
 	imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, HEIGHT, $width, $height);
+	// https://www.php.net/manual/en/function.exif-read-data.php#110894
+	$exif = exif_read_data($file);
+	if(!empty($exif['Orientation'])) {
+		switch($exif['Orientation']) {
+			case 8:
+				$dst = imagerotate($dst,90,0);
+				break;
+			case 3:
+				$dst = imagerotate($dst,180,0);
+				break;
+			case 6:
+				$dst = imagerotate($dst,-90,0);
+				break;
+		}
+	}
 	$imgsave = "image".$ext;
 	if (!$imgsave($dst, TMP_DIR.$file)) {
 		echo " can't save :-/";
