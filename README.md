@@ -14,7 +14,7 @@ cd /<WHERE_YOUR_IMAGES_ARE>/
 wget https://raw.githubusercontent.com/Oros42/KISSGallery/master/index.php
 ```
 
-## Recommendation, resize images you share
+## Recommendation, resize, optimise and make progressive your images
 Install imagemagick
 ```bash
 sudo apt install imagemagick
