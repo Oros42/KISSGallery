@@ -5,8 +5,8 @@
  * @author  Oros42 <oros.kissgallery@ecirtam.net>
  * @link    https://github.com/Oros42/KISSGallery
  * @license CC0 Public Domain
- * @version 1.3
- * @date    2020-11-01
+ * @version 1.4
+ * @date    2020-11-06
  *
  * Install :
  * $ sudo apt install php-gd
@@ -18,6 +18,7 @@
 $title = "KISSGallery"; // You can change
 define("HEIGHT", 300); // You can change
 define("MAKE_THUMBNAIL", true); // You can change but it's better to leave it to true
+define("FILE_SORT", "ASC"); // You can change. ascending:"ASC" or descending:"DESC"
 // You can change the favicon if you want
 define("FAVICON_PATH", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAL0lEQVQ4y2NkYGD4z0ABYGFgYGD4/x+7GYyMjAyE5JkYKAQDbwDjaCCOBuLwCEQAApMWH3p4gJkAAAAASUVORK5CYII=");
 //define("FAVICON_PATH", "favicon.png");
@@ -112,7 +113,7 @@ a{margin: 6px;color: red;text-decoration: none;display: inline-block;}
 .loader {position: absolute;border: 5px solid #636363;border-radius: 50%;border-top: 5px solid #333;border-bottom: 5px solid #333;width: 40px;height: 40px;-webkit-animation: spin 4s linear infinite;animation: spin 4s linear infinite;z-index: -1;left: 50%;top: 50%;margin-left: -25px;padding: 0;margin-top: -25px;}
 @-webkit-keyframes spin {0% { -webkit-transform: rotate(0deg); }100% { -webkit-transform: rotate(360deg); }}
 @keyframes spin {0% { transform: rotate(0deg); }100% { transform: rotate(360deg); }}
-#diapo{position:fixed;width:100%;height:100%;z-index:110;top:0;left:0;right:0;bottom:0;background:black;z-index: 110;}
+#diapo{position:fixed;width:100%;height:100%;z-index:110;top:0;left:0;right:0;bottom:0;background:black;}
 #bigImg{max-height: 100%;max-width: 100%;top: 0;bottom: 0;margin-top: auto;margin-bottom: auto;position: fixed;margin-left: auto;margin-right: auto;left: 0;right: 0;}
 .prev_next{position: fixed;top: 0;bottom: 0;width: 25%;color: #0000;}
 #close_diapo{right: 0;height: 100px;bottom:initial;}
@@ -136,6 +137,9 @@ $imgListe = [];
 $liste = scandir(".");
 unset($liste[0]); // rm .
 unset($liste[1]); // rm ..
+if (strtoupper(FILE_SORT) == "DESC") {
+	$liste = array_reverse($liste);
+}
 $needReload = false;
 foreach ($liste as $file) {
 	if (!in_array($file, $excludedFiles)) {

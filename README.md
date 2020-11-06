@@ -55,6 +55,17 @@ Example :
 100_4154.JPG;A cool building
 ```
 
+### Change the order of the files 
+
+For ascending (default) :
+```
+define("FILE_SORT", "ASC");
+```
+For descending :
+```
+define("FILE_SORT", "DESC");
+```
+
 # You want more ?
 
 ## For uploading files
