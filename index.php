@@ -3,10 +3,11 @@
  * KISSGallery (Keep It Stupid Simple Gallery)
  *
  * @author  Oros42 <oros.kissgallery@ecirtam.net>
+ * @contributors OranginaRouge (orangina-rouge.org)
  * @link    https://github.com/Oros42/KISSGallery
  * @license CC0 Public Domain
  * @version 1.4
- * @date    2020-11-06
+ * @date    2020-11-25
  *
  * Install :
  * $ sudo apt install php-gd
