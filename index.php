@@ -172,8 +172,8 @@ if (SHOW_HTML) {
 		} else {
 			$imgTitle = "";
 		}
-		$img = urlencode($img);
-		echo sprintf("<a href='%s' title=\"%s\"><img src='%s%s'></a>\n", $img, $imgTitle, TMP_DIR, $img);
+		$img = rawurlencode($img);
+		echo sprintf("<a href='%s' title=\"%s\"><img src='%s%s' loading='lazy'></a>\n", $img, $imgTitle, TMP_DIR, $img);
 	}
 ?>
 </div>
