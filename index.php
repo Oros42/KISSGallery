@@ -6,8 +6,8 @@
  * @contributors OranginaRouge (orangina-rouge.org)
  * @link    https://github.com/Oros42/KISSGallery
  * @license CC0 Public Domain
- * @version 1.5
- * @date    2020-11-25
+ * @version 1.7
+ * @date    2021-06-03
  *
  * Install :
  * $ sudo apt install php-gd
@@ -23,6 +23,7 @@ define("FILE_SORT", "ASC"); // You can change. ascending:"ASC" or descending:"DE
 // You can change the favicon if you want
 define("FAVICON_PATH", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAL0lEQVQ4y2NkYGD4z0ABYGFgYGD4/x+7GYyMjAyE5JkYKAQDbwDjaCCOBuLwCEQAApMWH3p4gJkAAAAASUVORK5CYII=");
 //define("FAVICON_PATH", "favicon.png");
+define("LIMIT_IMAGE_PER_PAGE", 50); // You can change. Interger > 0
 
 // If the script is run in cli mode (for creating cache)
 // then we don't show HTML
@@ -109,21 +110,23 @@ if (SHOW_HTML) {
 	<meta charset="utf-8">
 	<link rel="shortcut icon" href="<?php echo FAVICON_PATH; ?>" />
 	<style type="text/css">
-body{background-color: black;color: #AAAAAA;}
-a{margin: 6px;color: red;text-decoration: none;display: inline-block;}
-.loader {position: absolute;border: 5px solid #636363;border-radius: 50%;border-top: 5px solid #333;border-bottom: 5px solid #333;width: 40px;height: 40px;-webkit-animation: spin 4s linear infinite;animation: spin 4s linear infinite;z-index: -1;left: 50%;top: 50%;margin-left: -25px;padding: 0;margin-top: -25px;}
-@-webkit-keyframes spin {0% { -webkit-transform: rotate(0deg); }100% { -webkit-transform: rotate(360deg); }}
-@keyframes spin {0% { transform: rotate(0deg); }100% { transform: rotate(360deg); }}
+body{background-color:black;color:#AAAAAA;}
+a{margin:6px;color:red;text-decoration:none;display:inline-block;}
+.loader{position:absolute;border:5px solid #636363;border-radius:50%;border-top:5px solid #333;border-bottom:5px solid #333;width:40px;height:40px;-webkit-animation:spin 4s linear infinite;animation:spin 4s linear infinite;z-index:-1;left:50%;top:50%;margin-left:-25px;padding:0;margin-top:-25px;}
+@-webkit-keyframes spin{0%{-webkit-transform:rotate(0deg);}100% {-webkit-transform:rotate(360deg);}}
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 #diapo{position:fixed;width:100%;height:100%;z-index:110;top:0;left:0;right:0;bottom:0;background:black;}
-#bigImg{max-height: 100%;max-width: 100%;top: 0;bottom: 0;margin-top: auto;margin-bottom: auto;position: fixed;margin-left: auto;margin-right: auto;left: 0;right: 0;}
-.prev_next{position: fixed;top: 0;bottom: 0;width: 25%;color: #0000;}
-#close_diapo{right: 0;height: 100px;bottom:initial;}
-#close_diapo div{top: 0;bottom: initial;}
-#prev_diapo{left: 0;}
-#next_diapo{top: 100px;right: 0;}
-.prev_next div{font-size: xx-large;background: #0006;padding: 2px 5px 5px 10px;border-radius: 5px;position: absolute;color: #D1CFCFCC;bottom: 0;}
-.prev_next:hover div{color: #FFF;}
-#next_diapo div, #close_diapo div{right: 0;}
+#bigImg{max-height:100%;max-width:100%;top:0;bottom:0;margin-top:auto;margin-bottom:auto;position:fixed;margin-left:auto;margin-right:auto;left:0;right:0;}
+.prev_next{position:fixed;top:0;bottom:0;width:25%;color:#0000;}
+#close_diapo{right:0;height:100px;bottom:initial;}
+#close_diapo div{top:0;bottom:initial;}
+#prev_diapo{left:0;}
+#next_diapo{top:100px;right:0;}
+.prev_next div{font-size:xx-large;background:#0006;padding:2px 5px 5px 10px;border-radius:5px;position:absolute;color:#D1CFCFCC;bottom:0;}
+.prev_next:hover div{color:#FFF;}
+#next_diapo div,#close_diapo div{right:0;}
+#paging{text-align:center;}
+#paging a{background-color:#333;margin:0;padding:10px;}
 <?php 
 if (!MAKE_THUMBNAIL) {
 	printf("#imgListe a img{ height: %dpx;}\n", HEIGHT);
@@ -136,32 +139,53 @@ if (!MAKE_THUMBNAIL) {
 }
 $imgListe = [];
 $liste = scandir(".");
-unset($liste[0]); // rm .
-unset($liste[1]); // rm ..
 if (strtoupper(FILE_SORT) == "DESC") {
 	$liste = array_reverse($liste);
 }
 $needReload = false;
-foreach ($liste as $file) {
+if (!empty($_GET['page'])) {
+	$page = (int)$_GET['page'];
+} else {
+	$page = 0;
+}
+$startOffset = $page * LIMIT_IMAGE_PER_PAGE;
+$end = count($liste);
+$cptImg = 0;
+$showNextBtn = false;
+$totalImg = 0;
+for ($i=2; $i < $end; $i++) { 
+	$file = $liste[$i];
 	if (!in_array($file, $excludedFiles)) {
 		if (is_file($file) && filesize($file) > 11) {
 			$exif = exif_imagetype($file);
 			if ($exif > 0) {
 				$ext = substr(image_type_to_extension($exif),1); // don't trust file name !
 				if (in_array($ext, $allowedExt)) {
+					$totalImg++;
 					if (MAKE_THUMBNAIL && !is_file(TMP_DIR.$file)) {
 						if (makeThumbnail($file, $ext)) {
-							$imgListe[] = $file;
+							if ($cptImg < LIMIT_IMAGE_PER_PAGE) {
+								$imgListe[] = $file;
+								$cptImg++;
+							}
 						}
 						$needReload = true;
 					} else {
-						$imgListe[] = $file;
+						if ($startOffset > 0) {
+							$startOffset--;
+							continue;
+						}
+						if ($cptImg < LIMIT_IMAGE_PER_PAGE) {
+							$imgListe[] = $file;
+							$cptImg++;
+						}
 					}
 				}
 			}
 		}
 	}
 }
+$nbPages = (int)($totalImg / LIMIT_IMAGE_PER_PAGE);
 if (SHOW_HTML) {
 	if ($needReload) {
 	   	echo "<a href=''>Reload</a><br>\n";
@@ -177,7 +201,40 @@ if (SHOW_HTML) {
 		echo sprintf("<a href='%s' title=\"%s\"><img src='%s%s' loading='lazy'></a>\n", $img, $imgTitle, TMP_DIR, $img);
 	}
 ?>
-</div>
+</div><?php
+	if ($nbPages>0) {
+		echo "<br><div id='paging'>";
+		if ($page > 0) {
+			echo "<a href='?page=".($page-1)."'>◀</a> \n";
+		}
+		$initPagePrev = max(0, $page-3);
+		if($initPagePrev > 0){
+			echo "<a href='?page=0'>0</a> \n";
+			if ($initPagePrev > 1) {
+				echo "<a href='?page=".($page-1)."'>&hellip;</a> \n";
+			}
+
+		}
+		for ($pagePrev=$initPagePrev; $pagePrev < $page; $pagePrev++) { 
+			echo "<a href='?page=$pagePrev'>$pagePrev</a> \n";
+		}
+		echo "<a href='?page=$page'>[$page]</a> \n";
+		$endPaging = min($page+4, $nbPages);
+		for ($pageNext=$page+1; $pageNext < $endPaging; $pageNext++) { 
+			echo "<a href='?page=$pageNext'>$pageNext</a> \n";
+		}
+		if ($page +3 < $nbPages) {
+			echo "<a href='?page=".($page+1)."'>&hellip;</a>\n";
+		}
+		if($page < $nbPages){
+			echo "<a href='?page=".($nbPages)."'>$nbPages</a>\n";
+		}
+		if ($page<$nbPages) {
+			echo "<a href='?page=".($page+1)."'>▶</a>\n";
+		}
+		echo "</div>";
+	}
+?>
 <div id="diapo" hidden="">
 	<div id="loader" class="loader" hidden=""></div>
 	<img id="bigImg" src="" alt="" title="">
