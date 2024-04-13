@@ -6,8 +6,8 @@
  * @contributors OranginaRouge (orangina-rouge.org)
  * @link    https://github.com/Oros42/KISSGallery
  * @license CC0 Public Domain
- * @version 1.7
- * @date    2021-06-03
+ * @version 1.8
+ * @date    2024-04-13
  *
  * Install :
  * $ sudo apt install php-gd
@@ -191,6 +191,7 @@ if (SHOW_HTML) {
 	   	echo "<a href=''>Reload</a><br>\n";
 	}
 	echo "<div id='imgListe'>\n";
+	$i=0;
 	foreach ($imgListe as $img) {
 		if (isset($titles[$img])) {
 			$imgTitle = trim(htmlentities($titles[$img]));
@@ -198,7 +199,8 @@ if (SHOW_HTML) {
 			$imgTitle = "";
 		}
 		$img = rawurlencode($img);
-		echo sprintf("<a href='%s' title=\"%s\"><img src='%s%s' loading='lazy'></a>\n", $img, $imgTitle, TMP_DIR, $img);
+		echo sprintf("<a href='%s' title=\"%s\" id='a%d'><img src='%s%s' loading='lazy'></a>\n", $img, $imgTitle, $i, TMP_DIR, $img);
+		$i++;
 	}
 ?>
 </div><?php
@@ -239,7 +241,7 @@ if (SHOW_HTML) {
 	<div id="loader" class="loader" hidden=""></div>
 	<img id="bigImg" src="" alt="" title="">
 	<a href="#" onclick="prevDiapo();return false;" id="prev_diapo" class="prev_next" title="Previous"><div>❮</div></a>
-	<a href="#" onclick="closeDiapo();return false;" id="close_diapo" class="prev_next" title="Close"><div>✕</div></a>
+	<a href="#" onclick="closeDiapo();" id="close_diapo" class="prev_next" title="Close"><div>✕</div></a>
 	<a href="#" onclick="nextDiapo();return false;" id="next_diapo" class="prev_next" title="Next"><div>❯</div></a>
 </div>
 <script type="text/javascript">
@@ -252,12 +254,13 @@ if (SHOW_HTML) {
 		bigImg.src = aList[imgIndex].hash.split("&")[1];
 		bigImg.title = aList[imgIndex].title;
 		diapo.hidden = false;
+		close_diapo.href=`#a${imgIndex}`;
 		return false;
 	}
 	function closeDiapo() {
 		diapo.hidden = true;
 		loader.hidden = true;
-		document.location.hash = "";
+		document.location = close_diapo.href;
 	}
 	function prevDiapo() {
 		imgIndex--;
