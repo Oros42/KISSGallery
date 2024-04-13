@@ -6,44 +6,45 @@
 	<meta charset="utf-8">
 	<link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAL0lEQVQ4y2NkYGD4z0ABYGFgYGD4/x+7GYyMjAyE5JkYKAQDbwDjaCCOBuLwCEQAApMWH3p4gJkAAAAASUVORK5CYII=" />
 	<style type="text/css">
-body{background-color: black;color: #AAAAAA;}
-a{margin: 6px;color: red;text-decoration: none;display: inline-block;}
-.loader {position: absolute;border: 5px solid #636363;border-radius: 50%;border-top: 5px solid #333;border-bottom: 5px solid #333;width: 40px;height: 40px;-webkit-animation: spin 4s linear infinite;animation: spin 4s linear infinite;z-index: -1;left: 50%;top: 50%;margin-left: -25px;padding: 0;margin-top: -25px;}
-@-webkit-keyframes spin {0% { -webkit-transform: rotate(0deg); }100% { -webkit-transform: rotate(360deg); }}
-@keyframes spin {0% { transform: rotate(0deg); }100% { transform: rotate(360deg); }}
-#diapo{position:fixed;width:100%;height:100%;z-index:110;top:0;left:0;right:0;bottom:0;background:black;z-index: 110;}
-#bigImg{max-height: 100%;max-width: 100%;top: 0;bottom: 0;margin-top: auto;margin-bottom: auto;position: fixed;margin-left: auto;margin-right: auto;left: 0;right: 0;}
-.prev_next{position: fixed;top: 0;bottom: 0;width: 25%;color: #0000;}
-#close_diapo{right: 0;height: 100px;bottom:initial;}
-#close_diapo div{top: 0;bottom: initial;}
-#prev_diapo{left: 0;}
-#next_diapo{top: 100px;right: 0;}
-.prev_next div{font-size: xx-large;background: #0006;padding: 2px 5px 5px 10px;border-radius: 5px;position: absolute;color: #D1CFCFCC;bottom: 0;}
-.prev_next:hover div{color: #FFF;}
-#next_diapo div, #close_diapo div{right: 0;}
+body{background-color:black;color:#AAAAAA;}
+a{margin:6px;color:red;text-decoration:none;display:inline-block;}
+.loader{position:absolute;border:5px solid #636363;border-radius:50%;border-top:5px solid #333;border-bottom:5px solid #333;width:40px;height:40px;-webkit-animation:spin 4s linear infinite;animation:spin 4s linear infinite;z-index:-1;left:50%;top:50%;margin-left:-25px;padding:0;margin-top:-25px;}
+@-webkit-keyframes spin{0%{-webkit-transform:rotate(0deg);}100% {-webkit-transform:rotate(360deg);}}
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+#diapo{position:fixed;width:100%;height:100%;z-index:110;top:0;left:0;right:0;bottom:0;background:black;}
+#bigImg{max-height:100%;max-width:100%;top:0;bottom:0;margin-top:auto;margin-bottom:auto;position:fixed;margin-left:auto;margin-right:auto;left:0;right:0;}
+.prev_next{position:fixed;top:0;bottom:0;width:25%;color:#0000;}
+#close_diapo{right:0;height:100px;bottom:initial;}
+#close_diapo div{top:0;bottom:initial;}
+#prev_diapo{left:0;}
+#next_diapo{top:100px;right:0;}
+.prev_next div{font-size:xx-large;background:#0006;padding:2px 5px 5px 10px;border-radius:5px;position:absolute;color:#D1CFCFCC;bottom:0;}
+.prev_next:hover div{color:#FFF;}
+#next_diapo div,#close_diapo div{right:0;}
+#paging{text-align:center;}
+#paging a{background-color:#333;margin:0;padding:10px;}
 	</style>
 </head>
 <body>
 <div id='imgListe'>
-<a href='100_0178.jpg' title='A nice sunset'><img src='./cache/100_0178.jpg'></a>
-<a href='100_4154.JPG' title='A cool building'><img src='./cache/100_4154.JPG'></a>
-<a href='P1000306.JPG' title=''><img src='./cache/P1000306.JPG'></a>
-<a href='P1000365.JPG' title='This way'><img src='./cache/P1000365.JPG'></a>
-<a href='P1000444.JPG' title=''><img src='./cache/P1000444.JPG'></a>
-<a href='P1000573.JPG' title=''><img src='./cache/P1000573.JPG'></a>
-<a href='P1010632.JPG' title=''><img src='./cache/P1010632.JPG'></a>
-<a href='P1010645.JPG' title='Blossom (The Powerpuff Girls)'><img src='./cache/P1010645.JPG'></a>
-<a href='P1010713.JPG' title=''><img src='./cache/P1010713.JPG'></a>
-<a href='P1020349.JPG' title=''><img src='./cache/P1020349.JPG'></a>
-<a href='P1020382.JPG' title=''><img src='./cache/P1020382.JPG'></a>
-<a href='P1020397.JPG' title=''><img src='./cache/P1020397.JPG'></a>
-<a href='P1020608.JPG' title=''><img src='./cache/P1020608.JPG'></a>
-</div>
-<div id="diapo" hidden="">
+<a href='100_0178.jpg' title="A nice sunset" id='a0'><img src='./cache/100_0178.jpg' loading='lazy'></a>
+<a href='100_4154.JPG' title="A cool building" id='a1'><img src='./cache/100_4154.JPG' loading='lazy'></a>
+<a href='P1000306.JPG' title="" id='a2'><img src='./cache/P1000306.JPG' loading='lazy'></a>
+<a href='P1000365.JPG' title="This way" id='a3'><img src='./cache/P1000365.JPG' loading='lazy'></a>
+<a href='P1000444.JPG' title="" id='a4'><img src='./cache/P1000444.JPG' loading='lazy'></a>
+<a href='P1000573.JPG' title="" id='a5'><img src='./cache/P1000573.JPG' loading='lazy'></a>
+<a href='P1010632.JPG' title="" id='a6'><img src='./cache/P1010632.JPG' loading='lazy'></a>
+<a href='P1010645.JPG' title="Blossom (The Powerpuff Girls)" id='a7'><img src='./cache/P1010645.JPG' loading='lazy'></a>
+<a href='P1010713.JPG' title="" id='a8'><img src='./cache/P1010713.JPG' loading='lazy'></a>
+<a href='P1020349.JPG' title="" id='a9'><img src='./cache/P1020349.JPG' loading='lazy'></a>
+<a href='P1020382.JPG' title="" id='a10'><img src='./cache/P1020382.JPG' loading='lazy'></a>
+<a href='P1020397.JPG' title="" id='a11'><img src='./cache/P1020397.JPG' loading='lazy'></a>
+<a href='P1020608.JPG' title="" id='a12'><img src='./cache/P1020608.JPG' loading='lazy'></a>
+</div><div id="diapo" hidden="">
 	<div id="loader" class="loader" hidden=""></div>
 	<img id="bigImg" src="" alt="" title="">
 	<a href="#" onclick="prevDiapo();return false;" id="prev_diapo" class="prev_next" title="Previous"><div>❮</div></a>
-	<a href="#" onclick="closeDiapo();return false;" id="close_diapo" class="prev_next" title="Close"><div>✕</div></a>
+	<a href="#" onclick="closeDiapo();" id="close_diapo" class="prev_next" title="Close"><div>✕</div></a>
 	<a href="#" onclick="nextDiapo();return false;" id="next_diapo" class="prev_next" title="Next"><div>❯</div></a>
 </div>
 <script type="text/javascript">
@@ -56,12 +57,13 @@ a{margin: 6px;color: red;text-decoration: none;display: inline-block;}
 		bigImg.src = aList[imgIndex].hash.split("&")[1];
 		bigImg.title = aList[imgIndex].title;
 		diapo.hidden = false;
+		close_diapo.href=`#a${imgIndex}`;
 		return false;
 	}
 	function closeDiapo() {
 		diapo.hidden = true;
 		loader.hidden = true;
-		document.location.hash = "";
+		document.location = close_diapo.href;
 	}
 	function prevDiapo() {
 		imgIndex--;
